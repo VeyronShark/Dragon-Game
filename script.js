@@ -2,13 +2,17 @@ const dino = document.querySelector('.dino');
 const obstacle = document.querySelector('.obstacle');
 const gameOverText = document.querySelector(".game-over");
 const scoreText = document.querySelector(".score-container");
+const bgAudio = new Audio('./music.mp3');
+const gameOverAudio = new Audio('./gameover.mp3');
+
 let score = 0;
 let canscore = true;
 let animDuration = 1.5;
 let isJumping = false;
 
 document.addEventListener('keydown', (e) => {
-  // console.log(`Key pressed: ${e.key}`);
+  bgAudio.play();
+
   if (e.key === 'ArrowUp' && !isJumping) {
     isJumping = true;
 
@@ -56,7 +60,6 @@ const spawnObstacle = setInterval(() => {
       else {
         animDuration = 0.6;
       }
-      console.log(animDuration);
     }
   })
 }, 1500);
@@ -74,7 +77,6 @@ const playGame = setInterval(() => {
   }
   else if(obstacleRect.right <= dinoRect.left && canscore){
     score += 1;
-    console.log("SCORE!!")
     scoreText.innerText = `Your Score: ${score}`; 
     canscore = false;
   }
@@ -84,4 +86,7 @@ function gameOver() {
   obstacle.classList.remove("animating");
   gameOverText.style.visibility = "visible";
   clearInterval(playGame);
+  clearInterval(spawnObstacle);
+  bgAudio.pause();
+  gameOverAudio.play();
 }
